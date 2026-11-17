@@ -186,14 +186,14 @@ function closeB(){$('bm').style.display='none';lock(0)}
 function addItem(){
  const miss=[];if(B.f==null)miss.push('شكل الألبوم');if(B.s==null)miss.push('المقاس');if(B.m==null)miss.push('الخامة');else if(B.c==null)miss.push('لون الخامة');if(B.n==null)miss.push('طريقة الأسماء');
  if(miss.length){$('b-err').textContent='فضلًا اختر: '+miss.join('، ');return}
- CART.push({f:FORMS[B.f].n,s:SZ[B.s].n.replace('ألبوم ',''),sd:SZ[B.s].d,m:MATS[B.m].n,c:B.c+1,nm:NMS[B.n],names:$('b-names').value.trim(),x:B.x.map(i=>EXT[i].n),note:$('b-note').value.trim(),p:itemPrice()});
+ CART.push({fx:B.f,fi:FORMS[B.f].img,ct:MATS[B.m].s[B.c],f:FORMS[B.f].n,s:SZ[B.s].n.replace('ألبوم ',''),sd:SZ[B.s].d,m:MATS[B.m].n,c:B.c+1,nm:NMS[B.n],names:$('b-names').value.trim(),x:B.x.map(i=>EXT[i].n),note:$('b-note').value.trim(),p:itemPrice()});
  closeB();rFab();openC()
 }
 function total(){return CART.reduce((a,i)=>a+i.p,0)}
 function rCart(){
  $('cm').innerHTML=`<div class="sh"><h3>السلة</h3><button id="c-close" aria-label="إغلاق">×</button></div><div class="sb">`+
  (CART.length?CART.map((it,k)=>`<div class="ci"><button class="rm" data-r="${k}">حذف</button><b>ألبوم ${k+1}</b><br>الشكل: ${it.f}<br>المقاس: ${it.s} (${it.sd})<br>الخامة: ${it.m} — اللون رقم ${it.c}<br>الأسماء: ${it.nm}${it.names?' — '+it.names:''}${it.x.length?'<br>إضافات: '+it.x.join('، '):''}${it.note?'<br>ملاحظات: '+it.note:''}<br><b>${money(it.p)} ريال</b></div>`).join(''):'<div class="ci">السلة فارغة</div>')+
- `<div class="bs"><button class="chip" id="c-more">+ إضافة ألبوم آخر</button></div>
+ `<div class="bs"><button class="chip" id="c-more">+ إضافة ألبوم آخر</button> <button class="chip" id="c-img">📷 مشاركة الطلب كصورة</button></div>
  <div class="bs fm"><h4>بياناتك</h4><label>الاسم<input id="c-n" value="${CUS.n}" placeholder="اسمك الكريم"></label><label>رقم الجوال<input id="c-p" type="tel" inputmode="tel" value="${CUS.p}" placeholder="05xxxxxxxx"></label></div>
  <div class="err" id="c-err"></div><div style="font-size:12.5px;color:var(--mut);margin-top:8px">الأسعار تقديرية، ويؤكدها الاستديو معك بعد استلام الطلب.</div></div>
  <div class="bar"><span class="tot">الإجمالي: ${money(total())} ريال</span><button class="btn" id="c-send">تأكيد وإرسال عبر واتساب</button></div>`
@@ -201,16 +201,74 @@ function rCart(){
 function openC(){rCart();$('cm').style.display='block';$('cm').scrollTop=0;lock(1)}
 function closeC(){$('cm').style.display='none';lock(0)}
 const dig=s=>s.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/\D/g,'');
-function send(){
+const SITE_URL='https://ontopstudio.github.io/';
+function chk(){
  CUS.n=$('c-n').value.trim();CUS.p=$('c-p').value.trim();const ph=dig(CUS.p);
- if(!CART.length){$('c-err').textContent='السلة فارغة';return}
- if(!CUS.n){$('c-err').textContent='فضلًا اكتب اسمك';return}
- if(ph.length<9){$('c-err').textContent='فضلًا اكتب رقم جوال صحيح';return}
+ if(!CART.length){$('c-err').textContent='السلة فارغة';return null}
+ if(!CUS.n){$('c-err').textContent='فضلًا اكتب اسمك';return null}
+ if(ph.length<9){$('c-err').textContent='فضلًا اكتب رقم جوال صحيح';return null}
+ $('c-err').textContent='';return ph
+}
+function buildMsg(ph){
  const d=new Date(),no='ON-'+String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+Math.floor(100+Math.random()*900);
  let m='*طلب جديد — ONTOP Studio*\nرقم الطلب: '+no+'\n\n*بيانات العميل*\nالاسم: '+CUS.n+'\nالجوال: '+ph+'\n';
- CART.forEach((it,k)=>{m+='\n━━━━━━━━━━\n*الألبوم '+(k+1)+'*\nالشكل: '+it.f+'\nالمقاس: '+it.s+' ('+it.sd+')\nالخامة: '+it.m+' — اللون رقم '+it.c+'\nطريقة الأسماء: '+it.nm+'\nالأسماء والتاريخ: '+(it.names||'—')+'\nالإضافات: '+(it.x.length?it.x.join('، '):'—')+'\nملاحظات: '+(it.note||'—')+'\nالسعر التقديري: '+money(it.p)+' ريال\n'});
+ CART.forEach((it,k)=>{m+='\n━━━━━━━━━━\n*الألبوم '+(k+1)+'*\nالشكل: '+it.f+'\nصورة الشكل: '+SITE_URL+'img/f'+it.fx+'.jpg\nفي الموقع: '+SITE_URL+'#f'+it.fx+'\nالمقاس: '+it.s+' ('+it.sd+')\nالخامة: '+it.m+' — اللون رقم '+it.c+'\nطريقة الأسماء: '+it.nm+'\nالأسماء والتاريخ: '+(it.names||'—')+'\nالإضافات: '+(it.x.length?it.x.join('، '):'—')+'\nملاحظات: '+(it.note||'—')+'\nالسعر التقديري: '+money(it.p)+' ريال\n'});
  m+='\n━━━━━━━━━━\n*الإجمالي التقديري: '+money(total())+' ريال*\n(الأسعار تقديرية ويؤكدها الاستديو)';
- window.open('https://wa.me/'+SITE.whatsapp+'?text='+encodeURIComponent(m),'_blank')
+ return {m:m,no:no}
+}
+function send(){
+ const ph=chk();if(!ph)return;
+ window.open('https://wa.me/'+SITE.whatsapp+'?text='+encodeURIComponent(buildMsg(ph).m),'_blank')
+}
+function wrapT(x,t,w){const out=[];let l='';t.split(' ').forEach(wd=>{const tt=l?l+' '+wd:wd;if(x.measureText(tt).width>w&&l){out.push(l);l=wd}else l=tt});if(l)out.push(l);return out}
+function rrect(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+async function shareImg(){
+ const ph=chk();if(!ph)return;
+ const r=buildMsg(ph),m=r.m,no=r.no;
+ $('c-err').textContent='جارٍ تجهيز صورة الطلب...';
+ try{await document.fonts.load('700 30px Tajawal')}catch(e){}
+ const load=s=>new Promise(res=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>res(null);i.src=s});
+ const logo=await load(LOGO),ims=[];for(const it of CART){ims.push({fi:await load(it.fi),ct:await load(it.ct)})}
+ const W=1080,P=40,TXR=766,TW=706,FF='Tajawal,Arial,sans-serif';
+ let c=document.createElement('canvas');c.width=W;c.height=100;let x=c.getContext('2d');
+ x.direction='rtl';x.font='400 27px '+FF;
+ const rows=CART.map(it=>{const L=[];L.push({t:'ألبوم — '+it.f,b:1,s:31});
+  [['المقاس: '+it.s+' ('+it.sd+')'],['الخامة: '+it.m+' — اللون رقم '+it.c],['الأسماء: '+it.nm+(it.names?' — '+it.names:'')]].forEach(a=>wrapT(x,a[0],TW).forEach(t=>L.push({t:t,s:27})));
+  if(it.x.length)wrapT(x,'إضافات: '+it.x.join('، '),TW).forEach(t=>L.push({t:t,s:27}));
+  if(it.note)wrapT(x,'ملاحظات: '+it.note,TW).slice(0,3).forEach(t=>L.push({t:t,s:27}));
+  L.push({t:money(it.p)+' ريال',b:1,s:31,coral:1});
+  return {L:L,h:Math.max(330,L.length*42+50)}});
+ const H=330+rows.reduce((a,r)=>a+r.h+22,0)+150;
+ c=document.createElement('canvas');c.width=W;c.height=H;x=c.getContext('2d');x.direction='rtl';
+ x.fillStyle='#faf7f2';x.fillRect(0,0,W,H);
+ x.fillStyle='#fff';x.fillRect(0,0,W,190);
+ if(logo){const lh=100,lw=logo.width*lh/logo.height;x.drawImage(logo,W-P-lw,45,lw,lh)}
+ x.textAlign='left';x.fillStyle='#2f4160';x.font='700 30px '+FF;x.fillText(no,P,85);x.font='400 24px '+FF;x.fillStyle='#6f675e';x.fillText(new Date().toLocaleDateString('en-GB'),P,125);
+ x.textAlign='right';x.fillStyle='#c0605f';x.font='800 44px '+FF;x.fillText('طلب جديد',W-P,250);
+ x.fillStyle='#1d1a17';x.font='700 30px '+FF;x.fillText('العميل: '+CUS.n,W-P,300);x.fillStyle='#6f675e';x.font='400 27px '+FF;x.fillText('الجوال: '+ph,P+400,300);
+ let y=330;
+ rows.forEach((rw,k)=>{
+  x.fillStyle='#fff';rrect(x,P,y,W-2*P,rw.h,22);x.fill();x.strokeStyle='#e8e0d3';x.lineWidth=2;x.stroke();
+  const ix=W-P-20-230,iy=y+20,im=ims[k];
+  if(im.fi){x.save();rrect(x,ix,iy,230,230,16);x.clip();const s=Math.max(230/im.fi.width,230/im.fi.height),w=im.fi.width*s,hh=im.fi.height*s;x.drawImage(im.fi,ix+(230-w)/2,iy+(230-hh)/2,w,hh);x.restore()}
+  if(im.ct){x.save();rrect(x,ix,iy+246,56,56,12);x.clip();x.drawImage(im.ct,ix,iy+246,56,56);x.restore();x.strokeStyle='#e8e0d3';rrect(x,ix,iy+246,56,56,12);x.stroke()}
+  x.textAlign='right';x.fillStyle='#6f675e';x.font='400 24px '+FF;x.fillText('لون رقم '+CART[k].c,ix+230,iy+282);
+  let ty=y+55;
+  rw.L.forEach(l=>{x.font=(l.b?'800 ':'400 ')+l.s+'px '+FF;x.fillStyle=l.coral?'#c0605f':(l.b?'#2f4160':'#1d1a17');x.fillText(l.t,TXR,ty);ty+=42});
+  y+=rw.h+22
+ });
+ x.fillStyle='#2f4160';rrect(x,P,y,W-2*P,100,22);x.fill();
+ x.textAlign='right';x.fillStyle='#fff';x.font='800 38px '+FF;x.fillText('الإجمالي التقديري: '+money(total())+' ريال',W-P-30,y+64);
+ x.textAlign='center';x.fillStyle='#6f675e';x.font='400 22px '+FF;x.fillText('الأسعار تقديرية ويؤكدها الاستديو',W/2,y+140);
+ const blob=await new Promise(res=>c.toBlob(res,'image/png'));
+ const f=new File([blob],no+'.png',{type:'image/png'});
+ if(navigator.canShare&&navigator.canShare({files:[f]})){
+  $('c-err').textContent='';
+  try{await navigator.share({files:[f],text:m,title:'طلب ONTOP Studio'})}catch(e){}
+ }else{
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=f.name;document.body.appendChild(a);a.click();a.remove();
+  $('c-err').textContent='تم حفظ صورة الطلب في جهازك. أرفقها في محادثة الواتساب بعد الضغط على زر الإرسال.'
+ }
 }
 $('bm').onclick=e=>{
  const t=e.target.closest('[data-g]');
@@ -230,7 +288,8 @@ $('cm').onclick=e=>{
  if(r){CUS.n=$('c-n').value;CUS.p=$('c-p').value;CART.splice(+r.dataset.r,1);rFab();rCart();return}
  if(e.target.id==='c-close')closeC();
  if(e.target.id==='c-more'){CUS.n=$('c-n').value;CUS.p=$('c-p').value;closeC();openB()}
- if(e.target.id==='c-send')send()
+ if(e.target.id==='c-send')send();
+ if(e.target.id==='c-img')shareImg()
 };
 $('fab').onclick=()=>CART.length?openC():openB();
 $('hb').onclick=()=>openB();
@@ -243,6 +302,9 @@ $('pv').onclick=e=>{e.stopPropagation();mv(-1)};$('nx').onclick=e=>{e.stopPropag
 $('lb').onclick=()=>{$('lb').style.display='none'};
 let sx=0;$('lb').ontouchstart=e=>{sx=e.touches[0].clientX};
 $('lb').ontouchend=e=>{const d=e.changedTouches[0].clientX-sx;if(Math.abs(d)>50)mv(d>0?1:-1)};
+
+function route(){const m=/^#f(\d+)$/.exec(location.hash);if(m&&SITE.collections[+m[1]]){K=+m[1];J=0;show()}}
+window.addEventListener('hashchange',route);route();
 </script>
 </body>
 </html>
