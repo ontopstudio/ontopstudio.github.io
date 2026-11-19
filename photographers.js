@@ -9,6 +9,6 @@ const PHLIST=[
 const PHNAMES=[];
 
 /* ربط جدول قوقل: بعد نشر ملف Apps Script الصق رابطه بين علامتي الاقتباس (اتركه فارغًا إن لم تفعّل الربط) */
-const SHEET_URL_EXT="";
+const SHEET_URL_EXT="https://script.google.com/macros/s/AKfycbzppMltkTdxgRoDYRi8SHWBPm9OTXut-O_QA7cxu94yMiUknC8gbSAe0gwTOe-HSdoh/exec";
 /* مفتاح الحماية — يجب أن يطابق KEY في ملف apps-script.gs */
 const SHEET_KEY_EXT="ot-011f36522dffdd0b5510";
