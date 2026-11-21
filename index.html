@@ -66,6 +66,14 @@ h2{font-size:24px;font-weight:800;margin-bottom:4px}
 .ci b{color:var(--ac2)}.ci .rm{float:left;color:#c0392b;background:none;border:0;cursor:pointer;font-family:inherit;font-size:13px}
 #fab{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));inset-inline-start:16px;z-index:15;background:var(--ac);color:#fff;border:0;border-radius:30px;padding:12px 20px;font-family:inherit;font-weight:700;font-size:15px;box-shadow:0 6px 20px rgba(0,0,0,.28);cursor:pointer}
 .err{color:#c0392b;font-size:13.5px;margin-top:10px;min-height:18px}
+.bs{margin-top:22px}
+#bkm{display:none;position:fixed;inset:0;z-index:30;background:var(--bg);overflow-y:auto;padding-bottom:110px}
+.cal-h{display:flex;justify-content:space-between;align-items:center;margin:6px 0 10px}.cal-h button{background:var(--card);border:1.5px solid var(--ln);border-radius:12px;width:42px;height:42px;font-size:22px;color:var(--tx);cursor:pointer}.cal-h button:disabled{opacity:.3;cursor:default}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.cal .dh{text-align:center;font-size:11px;color:var(--mut)}
+.cal button{aspect-ratio:1;border-radius:12px;border:1.5px solid var(--ln);background:var(--card);color:var(--tx);font-family:inherit;font-size:15px;padding:0;cursor:pointer;line-height:1.15}
+.cal button.off{opacity:.38;cursor:not-allowed;text-decoration:line-through}.cal button.sel{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:800}
+.cal button small{display:block;font-size:9px;text-decoration:none}.legend{display:flex;gap:14px;font-size:12px;color:var(--mut);margin-top:10px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:12px;margin-top:6px}
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;font-size:14px}
 th,td{padding:10px 12px;border-bottom:1px solid var(--ln);text-align:right;white-space:nowrap}
@@ -95,13 +103,13 @@ footer{text-align:center;color:var(--mut);font-size:13px;padding:24px 0 30px}
 <section id="prices"><h2>جدول الأسعار</h2><div class="sub">الأسعار قابلة للتغيير، تواصل معنا للتأكيد</div>
 <div id="pl"></div></section>
 <section id="studio"><h2>خدمات الاستديو</h2><div class="sub">التصوير داخل الاستديو وخارجه، والدورات التدريبية</div><div class="g" id="sv"></div></section>
-<section id="works"><h2>من أعمال المصوّرة حنان واصلي</h2><div class="sub">لقطات من تصوير الزواجات</div><div class="row vr" id="vr"></div><div style="text-align:center;margin-top:14px"><a class="btn" href="https://www.tiktok.com/@hananwasliy" target="_blank" rel="noopener">شاهد المزيد على تيك توك</a></div><h3 class="ph">باقات التصوير مع المصوّرة حنان واصلي</h3><div class="pkgs" id="pkgs"></div><div class="pnote" id="pnote"></div></section>
+<section id="works"><h2>من أعمال المصوّرة حنان واصلي</h2><div class="sub">لقطات من تصوير الزواجات</div><div class="row vr" id="vr"></div><div style="text-align:center;margin-top:14px"><a class="btn" href="https://www.tiktok.com/@hananwasliy" target="_blank" rel="noopener">شاهد المزيد على تيك توك</a></div><h3 class="ph">باقات التصوير مع المصوّرة حنان واصلي</h3><div style="text-align:center;margin-bottom:16px"><button class="btn" id="bk-open" style="border:0;font-family:inherit;cursor:pointer;background:#2f4160">📅 احجزي موعدك مع حنان</button></div><div class="pkgs" id="pkgs"></div><div class="pnote" id="pnote"></div></section>
 <section id="print"><h2>خدمات المطبعة</h2><div class="sub">من التصميم إلى الطباعة والتجليد</div><div class="g" id="pvv"></div></section>
 <section id="contact"><div class="ct"><h2>جاهزون لخدمتك</h2><p id="addr"></p>
 <a class="btn" id="wa" href="#">واتساب</a><a class="btn o" href="https://maps.app.goo.gl/GHAVqQpXjMXq39Co6" target="_blank" rel="noopener">الموقع على الخرائط</a><a class="btn o" href="https://www.tiktok.com/@ontop_studio1" target="_blank" rel="noopener">تيك توك الاستديو</a></div></section>
 </div>
 <div id="lb"><img alt=""><button id="pv">›</button><button id="nx">‹</button><div id="cn"></div></div>
-<div id="bm"></div><div id="cm"></div><div id="lgm"></div><button id="fab" style="display:none">🛒 صمّم ألبومك</button>
+<div id="bm"></div><div id="cm"></div><div id="lgm"></div><div id="bkm"></div><button id="fab" style="display:none">🛒 صمّم ألبومك</button>
 <footer>© ONTOP Studio</footer>
 <script src="photographers.js"></script>
 <script>
@@ -142,7 +150,7 @@ const vs=[...document.querySelectorAll('.row video')];
 vs.forEach(v=>{v.muted=true;v.onclick=()=>{v.muted=!v.muted;if(!v.muted)vs.forEach(o=>{if(o!==v)o.muted=true})}});
 if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.play().catch(()=>{})}else{e.target.pause()}}),{threshold:.6});vs.forEach(v=>io.observe(v))}
 const PKGS=[{n:"الباقة الاقتصادية",h:"3 ساعات تصوير فوتو وفيديو",f:["تصوير العرسان","ألبوم كبير (30×45) مع ميني ألبوم","40 صورة في 10 صفحات","لوحة خشبية كبيرة"]},{n:"الباقة الفضية",h:"4 ساعات تصوير فوتو وفيديو",f:["تصوير العرسان","ألبوم كبير (30×45) مع ميني ألبوم","50 صورة في 10 صفحات","لوحة خشبية كبيرة","تصوير 8 صور عائلية"]},{n:"باقة الفل داي",top:1,tg:"الأشمل",h:"10 ساعات تصوير فوتو وفيديو",f:["تصوير العرسان","ألبوم كبير (30×60) مع ميني ألبوم","70 صورة في 20 صفحة","لوحة خشبية كبيرة","تصوير 10 صور عائلية","تصوير العرض التشويقي داخل القاعة"]}];
-$('pkgs').innerHTML=PKGS.map(p=>`<div class="pk2${p.top?' top':''}">${p.tg?`<span class="tg">${p.tg}</span>`:''}<h4>${p.n}</h4><span class="hr">${p.h}</span><ul>${p.f.map(x=>`<li>${x}</li>`).join('')}</ul><a class="btn bk" target="_blank" rel="noopener" href="https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent('أرغب بحجز: '+p.n+' مع المصوّرة حنان واصلي')}">احجز الباقة</a></div>`).join('');
+$('pkgs').innerHTML=PKGS.map((p,i)=>`<div class="pk2${p.top?' top':''}">${p.tg?`<span class="tg">${p.tg}</span>`:''}<h4>${p.n}</h4><span class="hr">${p.h}</span><ul>${p.f.map(x=>`<li>${x}</li>`).join('')}</ul><button class="btn bk" data-bk="${i}" style="border:0;font-family:inherit;cursor:pointer;width:100%">📅 احجزي هذه الباقة</button></div>`).join('');
 $('pnote').innerHTML=`<b>ملحقات مجانية مع كل الباقات:</b> تصوير الزفة، تصوير الفيرست لوك، وذاكرة مجانية لجميع اللقطات المختارة.<br><b>إضافات اختيارية:</b> ساعة إضافية، ميني ألبوم للعائلة، وتصوير العرض التشويقي (للباقتين الاقتصادية والفضية).`;
 const PRICES={albums:[{n:"ألبوم A6",d:"ألبوم صغير",p:350},{n:"ألبوم A5",d:"30 × 21 سم",p:595},{n:"ألبوم وسط",d:"38 × 26 سم",p:695},{n:"ألبوم A4",d:"30 × 45 سم",p:790},{n:"ألبوم A3",d:"30 × 60 سم",p:1190},{n:"ألبوم بانوراما",d:"30 × 80 سم",p:1390}],withA6:[{n:"ألبوم A5",d:"30 × 21 سم",p:595},{n:"ألبوم وسط + A6",d:"38 × 26 سم",p:750},{n:"ألبوم A4 + A6",d:"30 × 45 سم",p:790},{n:"ألبوم A3 + A6",d:"30 × 60 سم",p:1190},{n:"ألبوم بانوراما + A6",d:"30 × 80 سم",p:1390}],extras:[{n:"ألبوم صغير A6 إضافي",d:"بنفس تصميم الألبوم",p:"+100"},{n:"يوسبي خشبي محفور",d:"أسماء العرسان بالليزر، سعة 8 جيجا",p:"35"}]};
 const prow=x=>`<div class="pr-row"><div class="pn"><b>${x.n}</b><span>${x.d}</span></div><div class="pc"><strong>${x.p}</strong><small>ريال</small></div></div>`;
@@ -330,6 +338,103 @@ $('lgm').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='lg-c')doLogin()};
 $('lgb').onclick=openL;
 document.addEventListener('click',e=>{if(e.target.id==='lgo'){e.preventDefault();AUTH=null;try{localStorage.removeItem('ph')}catch(x){}CART=[];CARTNO=null;applyAuth()}});
 loadAuth();
+
+/* ===== حجوزات المصوّرة حنان واصلي ===== */
+function jp(params){return new Promise((res,rej)=>{
+ if(typeof SHEET_URL==='undefined'||!SHEET_URL){rej(new Error('no-url'));return}
+ const cb='jp'+Date.now()+Math.floor(Math.random()*1e5),s=document.createElement('script');
+ function done(){clearTimeout(t);delete window[cb];s.remove()}
+ const t=setTimeout(()=>{done();rej(new Error('timeout'))},20000);
+ window[cb]=d=>{done();res(d)};
+ s.onerror=()=>{done();rej(new Error('network'))};
+ const q=Object.keys(params).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(params[k])).join('&');
+ s.src=SHEET_URL+(SHEET_URL.indexOf('?')>-1?'&':'?')+q+'&callback='+cb;document.body.appendChild(s)})}
+const DOWN=['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'],DOWS=['سبت','أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+const fmtH=new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'long',year:'numeric'});
+const fmtM=new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn',{month:'long',year:'numeric'});
+const pad2=n=>String(n).padStart(2,'0');
+const dstr=(y,m,d)=>y+'-'+pad2(m+1)+'-'+pad2(d);
+const fromS=s=>{const a=s.split('-');return new Date(+a[0],+a[1]-1,+a[2])};
+const dayN=s=>DOWN[(fromS(s).getDay()+1)%7];
+const hij=s=>{try{return fmtH.format(fromS(s))}catch(e){return''}};
+let BKS={f:{n:'',p:'',l:'',t:''}};
+function bkPk(){return BKS.cfg&&BKS.cfg.packages&&BKS.cfg.packages.length?BKS.cfg.packages:PKGS.map(p=>({name:p.n,hours:parseInt(p.h,10)||0,times:[]}))}
+async function openBk(name){
+ BKS={f:BKS.f,cfg:null,pi:null,date:null,time:'',extra:0,ym:null,busy:false};
+ $('bkm').style.display='block';lock(1);$('bkm').scrollTop=0;
+ $('bkm').innerHTML='<div class="sh"><h3>حجز موعد تصوير</h3><button id="bk-x" aria-label="إغلاق">×</button></div><div class="sb"><div class="bs" style="text-align:center;color:var(--mut)">جارٍ تحميل المواعيد...</div></div>';
+ try{BKS.cfg=await jp({action:'config'})}catch(e){BKS.cfg=null}
+ const n=new Date(),t=(BKS.cfg&&BKS.cfg.today)||dstr(n.getFullYear(),n.getMonth(),n.getDate());
+ BKS.today=t;const a=t.split('-');BKS.ym={y:+a[0],m:+a[1]-1};
+ if(name){const i=bkPk().findIndex(p=>p.name===name);if(i>-1)BKS.pi=i}
+ bkRender()
+}
+function bkRender(){
+ const f=BKS.f;
+ $('bkm').innerHTML=`<div class="sh"><h3>حجز موعد تصوير مع حنان واصلي</h3><button id="bk-x" aria-label="إغلاق">×</button></div><div class="sb">
+ <div class="bs"><h4>1) الباقة</h4><div class="ch" id="bk-p"></div></div>
+ <div class="bs"><h4>2) التاريخ</h4><div id="bk-c"></div></div>
+ <div class="bs" id="bk-t"></div>
+ <div class="bs fm"><h4>4) بياناتك</h4><label>اسم العروس<input id="bk-n" value="${f.n}" placeholder="الاسم"></label><label>رقم الجوال<input id="bk-ph" type="tel" inputmode="tel" value="${f.p}" placeholder="05xxxxxxxx"></label><label>موقع المناسبة (المدينة والقاعة)<input id="bk-l" value="${f.l}" placeholder="مثال: جازان — قاعة ..."></label><label>ملاحظات (اختياري)<textarea id="bk-no" rows="2" placeholder="أي تفاصيل تريدين إخبارنا بها">${f.t}</textarea></label></div>
+ <div class="err" id="bk-e"></div></div>
+ <div class="bar"><span class="tot" id="bk-s" style="font-size:13px;font-weight:600"></span><button class="btn" id="bk-go" style="border:0;font-family:inherit;cursor:pointer">إرسال طلب الحجز</button></div>`;
+ bkP();bkC();bkT()
+}
+function bkP(){$('bk-p').innerHTML=bkPk().map((p,i)=>`<button class="chip${BKS.pi===i?' on':''}" data-bp="${i}">${p.name}<small>${p.hours?p.hours+' ساعات تصوير':''}</small></button>`).join('')}
+function bkC(){
+ const y=BKS.ym.y,m=BKS.ym.m,un=(BKS.cfg&&BKS.cfg.unavailable)||{},first=new Date(y,m,1),n=new Date(y,m+1,0).getDate(),off=(first.getDay()+1)%7;
+ const t=BKS.today.split('-'),cur=(+t[0])*12+(+t[1]-1),here=y*12+m;
+ let h='<div class="cal-h"><button data-bn="-1"'+(here<=cur?' disabled':'')+'>›</button><b>'+fmtM.format(first)+'</b><button data-bn="1"'+(here>=cur+24?' disabled':'')+'>‹</button></div><div class="cal">'+DOWS.map(d=>'<div class="dh">'+d+'</div>').join('');
+ for(let i=0;i<off;i++)h+='<div></div>';
+ for(let d=1;d<=n;d++){const s=dstr(y,m,d),past=s<BKS.today,st=un[s],dis=past||st;h+=`<button class="${dis?'off':''}${BKS.date===s?' sel':''}" ${dis?'disabled':''} data-bd="${s}">${d}${st==='full'?'<small>مكتمل</small>':st==='blocked'?'<small>غير متاح</small>':''}</button>`}
+ $('bk-c').innerHTML=h+'</div><div class="legend"><span>⬜ متاح</span><span>▫️ غير متاح (مغلق أو مكتمل)</span></div>'
+}
+function bkT(){
+ const pk=bkPk()[BKS.pi],box=$('bk-t');
+ if(!pk||!BKS.date){box.innerHTML='<div style="font-size:13.5px;color:var(--mut)">'+(!pk?'اختاري الباقة أولًا':'اختاري التاريخ من التقويم')+' لإكمال الحجز.</div>';$('bk-s').textContent='';return}
+ let h='<h4>3) وقت البدء</h4>';
+ if(pk.times&&pk.times.length)h+='<div class="ch">'+pk.times.map(t=>`<button class="chip${BKS.time===t?' on':''}" data-bt="${t}">${t}</button>`).join('')+'</div>';
+ else h+=`<div class="fm"><input id="bk-tm" type="time" value="${BKS.time}"></div>`;
+ h+=`<div style="margin-top:14px;font-size:14px">ساعات إضافية (اختياري):</div><div class="step"><button class="chip" data-bx="-1">−</button><b style="min-width:30px;text-align:center;font-size:18px">${BKS.extra}</b><button class="chip" data-bx="1">+</button></div><div style="font-size:12.5px;color:var(--mut);margin-top:4px">تُحتسب الساعات الإضافية بسعر إضافي يؤكده الاستديو معك.</div>`;
+ box.innerHTML=h;
+ $('bk-s').innerHTML=dayN(BKS.date)+' '+BKS.date+'<br>'+hij(BKS.date)+(BKS.time?' · '+BKS.time:'')
+}
+function bkMsg(id){
+ const pk=bkPk()[BKS.pi],f=BKS.f;
+ return '*طلب حجز تصوير — ONTOP Studio*\n'+(id?'رقم الحجز: '+id+'\n':'')+'المصوّرة المطلوبة: حنان واصلي\nالباقة: '+pk.name+(pk.hours?' ('+pk.hours+' ساعات)':'')+(BKS.extra?' + '+BKS.extra+' ساعة إضافية (بسعر إضافي)':'')+'\nالموعد: '+dayN(BKS.date)+' '+BKS.date+(hij(BKS.date)?' ('+hij(BKS.date)+')':'')+'\nوقت البدء: '+BKS.time+'\n\n*بيانات العروس*\nالاسم: '+f.n+'\nالجوال: '+f.p+'\nموقع المناسبة: '+(f.l||'—')+'\nملاحظات: '+(f.t||'—')+'\n\nالحالة: بانتظار التأكيد'
+}
+function bkWa(msg){return 'https://wa.me/'+SITE.whatsapp+'?text='+encodeURIComponent(msg)}
+function bkDone(id,fallback){
+ $('bkm').innerHTML=`<div class="sh"><h3>طلب الحجز</h3><button id="bk-x" aria-label="إغلاق">×</button></div><div class="sb"><div class="bs" style="text-align:center"><div style="font-size:46px">${fallback?'📨':'✅'}</div><h3 style="margin:8px 0">${fallback?'أرسلي الطلب عبر واتساب':'تم استلام طلب الحجز'}</h3>${id?'<div style="color:var(--mut)">رقم الحجز: <b style="color:var(--ac2)">'+id+'</b></div>':''}<p style="color:var(--mut);margin:12px 0;line-height:1.9">${fallback?'تعذّر الاتصال بنظام الحجز. اضغطي الزر لإرسال طلبك مباشرة على واتساب الاستديو.':'الحجز <b>بانتظار التأكيد</b>، وسنتواصل معك لتأكيده ومتابعة الدفع. اضغطي الزر لإرسال تفاصيل الحجز لواتساب الاستديو حتى يصلنا التنبيه فورًا.'}</p><a class="btn" target="_blank" rel="noopener" href="${bkWa(bkMsg(id))}">إرسال التفاصيل عبر واتساب</a><div style="margin-top:14px"><button class="chip" id="bk-x2">إغلاق</button></div></div></div>`
+}
+async function bkSubmit(){
+ const f=BKS.f,err=m=>{$('bk-e').textContent=m},pk=bkPk()[BKS.pi];
+ f.n=$('bk-n').value.trim();f.p=dig($('bk-ph').value);f.l=$('bk-l').value.trim();f.t=$('bk-no').value.trim();
+ if(!pk)return err('اختاري الباقة');if(!BKS.date)return err('اختاري تاريخ الحجز');
+ if(!BKS.time)return err('اختاري وقت البدء');if(!f.n)return err('اكتبي اسم العروس');if(f.p.length<9)return err('اكتبي رقم جوال صحيح');
+ err('');if(BKS.busy)return;BKS.busy=true;$('bk-go').textContent='جارٍ الإرسال...';
+ if(typeof SHEET_URL==='undefined'||!SHEET_URL){window.open(bkWa(bkMsg('')),'_blank');BKS.busy=false;$('bk-go').textContent='إرسال طلب الحجز';return}
+ try{
+  const r=await jp({action:'book',d:JSON.stringify({pkg:pk.name,date:BKS.date,time:BKS.time,extra:BKS.extra,name:f.n,phone:f.p,place:f.l,note:f.t})});
+  BKS.busy=false;
+  if(r&&r.ok){bkDone(r.id,false)}
+  else{$('bk-go').textContent='إرسال طلب الحجز';err((r&&r.error)||'تعذّر إرسال الطلب');try{BKS.cfg=await jp({action:'config'});bkC()}catch(e){}}
+ }catch(e){BKS.busy=false;bkDone('',true)}
+}
+function bkClose(){$('bkm').style.display='none';lock(0)}
+$('bkm').onclick=e=>{
+ const t=e.target;
+ if(t.id==='bk-x'||t.id==='bk-x2'){bkClose();return}
+ if(t.id==='bk-go'){bkSubmit();return}
+ const b=t.closest('[data-bp],[data-bd],[data-bt],[data-bn],[data-bx]');if(!b)return;
+ if(b.dataset.bp!=null){BKS.pi=+b.dataset.bp;BKS.time='';bkP();bkT()}
+ else if(b.dataset.bd){BKS.date=b.dataset.bd;bkC();bkT()}
+ else if(b.dataset.bt){BKS.time=b.dataset.bt;bkT()}
+ else if(b.dataset.bn){let m=BKS.ym.m+(+b.dataset.bn),y=BKS.ym.y;if(m<0){m=11;y--}if(m>11){m=0;y++}BKS.ym={y:y,m:m};bkC()}
+ else if(b.dataset.bx){BKS.extra=Math.max(0,Math.min(10,BKS.extra+(+b.dataset.bx)));bkT()}
+};
+$('bkm').addEventListener('input',e=>{if(e.target.id==='bk-tm'){BKS.time=e.target.value;$('bk-s').innerHTML=dayN(BKS.date)+' '+BKS.date+'<br>'+hij(BKS.date)+(BKS.time?' · '+BKS.time:'')}});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-bk]');if(b)openBk(PKGS[+b.dataset.bk].n);if(e.target.id==='bk-open')openBk(null)});
 
 let K=0,J=0;
 function show(){const l=SITE.collections[K].i;$('lb').firstElementChild.src=IMG[l[J]];$('cn').textContent=(J+1)+" / "+l.length;$('lb').style.display='flex'}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow"><title>حجوزات حنان واصلي — ONTOP Studio</title>
+<script src="photographers.js"></script>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--tx:#1d1a17;--mut:#6f675e;--ac:#c0605f;--ac2:#2f4160;--ln:#e8e0d3}
+*{box-sizing:border-box;margin:0}body{background:var(--bg);color:var(--tx);font-family:Tahoma,Arial,sans-serif;line-height:1.7;padding-bottom:40px}
+button,input,select,textarea{font-family:inherit;font-size:15px}
+header{background:var(--ac2);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+header h1{font-size:17px}header button{background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:10px;padding:6px 12px;cursor:pointer;margin-inline-start:6px}
+.w{max-width:760px;margin:auto;padding:14px 14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:10px;text-align:center;cursor:pointer}.stat b{display:block;font-size:24px;color:var(--ac2)}.stat span{font-size:12px;color:var(--mut)}
+.tabs{display:flex;gap:8px;margin:14px 0}.tabs button{flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--ln);background:var(--card);cursor:pointer;font-weight:700}.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.mh button{width:42px;height:42px;border-radius:12px;border:1.5px solid var(--ln);background:var(--card);font-size:22px;cursor:pointer}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.cal .dh{text-align:center;font-size:11px;color:var(--mut)}
+.d{aspect-ratio:1;border-radius:12px;border:1.5px solid var(--ln);background:var(--card);cursor:pointer;padding:3px;font-size:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.d.free{background:#eaf6ea;border-color:#bfe0bf}.d.past{opacity:.45}.d.blk{background:#e6e2dc;text-decoration:line-through}.d.today{box-shadow:0 0 0 2px var(--ac2)}.d.sel{outline:3px solid var(--ac);outline-offset:1px}
+.dots{display:flex;gap:3px;font-size:10px;font-weight:700}.dots i{font-style:normal;border-radius:8px;padding:0 5px;color:#fff}.dp{background:#d89b00}.dc{background:#2e9b4e}
+.lg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin:8px 0}
+.panel{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:12px;margin-top:12px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:12px 14px;margin-top:10px}
+.card .t{display:flex;justify-content:space-between;gap:8px;font-weight:700}.card .m{font-size:13.5px;color:var(--mut)}
+.badge{display:inline-block;border-radius:10px;padding:0 10px;font-size:12px;font-weight:700;color:#fff}.s0{background:#d89b00}.s1{background:#2e9b4e}.s2{background:#6f675e}.s3{background:#c0392b}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.acts button,.acts a{border:1.5px solid var(--ln);background:var(--bg);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:13.5px;color:var(--tx);text-decoration:none}
+.acts .ok{background:#2e9b4e;color:#fff;border-color:#2e9b4e}.acts .no{color:#c0392b}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chips button{border:1.5px solid var(--ln);background:var(--card);border-radius:20px;padding:6px 14px;cursor:pointer}.chips button.on{background:var(--ac2);color:#fff;border-color:var(--ac2)}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700}.btn.o{background:var(--card);color:var(--ac2);border:1.5px solid var(--ln)}
+.login{max-width:380px;margin:60px auto;background:var(--card);border:1px solid var(--ln);border-radius:18px;padding:22px;text-align:center}.login input{width:100%;margin:12px 0;padding:11px;border:1.5px solid var(--ln);border-radius:12px;background:var(--bg)}
+.err{color:#c0392b;font-size:13.5px;min-height:20px}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20;overflow-y:auto}.sheet{background:var(--bg);max-width:520px;margin:30px auto;border-radius:18px;padding:16px}
+.sheet label{display:block;font-size:13.5px;margin-top:10px}.sheet input,.sheet select,.sheet textarea{width:100%;padding:9px 10px;border:1.5px solid var(--ln);border-radius:10px;background:var(--card);margin-top:4px}
+.empty{color:var(--mut);text-align:center;padding:16px;font-size:14px}
+</style></head><body>
+<div id="app"></div>
+<div class="ov" id="ov"><div class="sheet" id="sh"></div></div>
+<script>
+const URL_=(typeof SHEET_URL_EXT!=='undefined')?SHEET_URL_EXT:'';
+const $=id=>document.getElementById(id);
+const DOWN=['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'],DOWS=['سبت','أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+const fmtM=new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn',{month:'long',year:'numeric'});
+const fmtH=new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'long',year:'numeric'});
+const pad=n=>String(n).padStart(2,'0'),dstr=(y,m,d)=>y+'-'+pad(m+1)+'-'+pad(d),fromS=s=>{const a=s.split('-');return new Date(+a[0],+a[1]-1,+a[2])};
+const dayN=s=>DOWN[(fromS(s).getDay()+1)%7],hij=s=>{try{return fmtH.format(fromS(s))}catch(e){return''}};
+const ST=['بانتظار التأكيد','مؤكد','مكتمل','ملغي'],PAY=['غير مدفوع','عربون','مدفوع كامل'];
+let CODE='',D=null,TAB='cal',YM=null,SEL=null,FIL='pending';
+function jp(params){return new Promise((res,rej)=>{
+ if(!URL_){rej(new Error('no-url'));return}
+ const cb='jp'+Date.now()+Math.floor(Math.random()*1e5),s=document.createElement('script');
+ function done(){clearTimeout(t);delete window[cb];s.remove()}
+ const t=setTimeout(()=>{done();rej(new Error('timeout'))},20000);
+ window[cb]=d=>{done();res(d)};s.onerror=()=>{done();rej(new Error('network'))};
+ const q=Object.keys(params).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(params[k])).join('&');
+ s.src=URL_+(URL_.indexOf('?')>-1?'&':'?')+q+'&callback='+cb;document.body.appendChild(s)})}
+const api=(a,p)=>jp(Object.assign({action:a,code:CODE},p||{}));
+function login(){
+ $('app').innerHTML=`<header><h1>حجوزات حنان واصلي</h1></header><div class="login"><div style="font-size:38px">📅</div><h2 style="font-size:19px;color:var(--ac2)">دخول متابعة الحجوزات</h2><input id="c" type="password" placeholder="رمز الدخول" autocomplete="off"><div class="err" id="e">${URL_?'':'لم يُربط الموقع بجدول قوقل بعد'}</div><button class="btn" id="g" style="width:100%">دخول</button></div>`;
+ $('g').onclick=tryLogin;$('c').onkeydown=e=>{if(e.key==='Enter')tryLogin()};
+}
+async function tryLogin(){
+ CODE=$('c').value.trim();if(!CODE)return;$('e').textContent='جارٍ التحقق...';
+ try{const r=await api('admin_list');if(!r.ok){$('e').textContent=r.error==='auth'?'رمز غير صحيح':'تعذّر الدخول';return}
+  try{localStorage.setItem('hcode',CODE)}catch(e){}load(r)}catch(e){$('e').textContent='تعذّر الاتصال، حاولي مرة أخرى'}
+}
+function load(r){D=r;if(!YM){const a=r.today.split('-');YM={y:+a[0],m:+a[1]-1}}render()}
+async function refresh(){try{const r=await api('admin_list');if(r.ok){D=r;render()}else alert('انتهت الجلسة، سجّلي الدخول مجددًا')}catch(e){alert('تعذّر التحديث')}}
+const act=b=>b.status==='بانتظار التأكيد'||b.status==='مؤكد';
+const phoneIntl=p=>{p=String(p).replace(/\D/g,'');return p.startsWith('0')?'966'+p.slice(1):p};
+function render(){
+ const t=D.today,B=D.bookings,pend=B.filter(b=>b.status==='بانتظار التأكيد'&&b.date>=t).length,conf=B.filter(b=>b.status==='مؤكد'&&b.date>=t).length;
+ const ms=dstr(YM.y,YM.m,1).slice(0,7),mon=B.filter(b=>act(b)&&b.date.slice(0,7)===t.slice(0,7)).length;
+ $('app').innerHTML=`<header><h1>📅 حجوزات حنان واصلي</h1><div><button id="rf">تحديث ↻</button><button id="lo">خروج</button></div></header><div class="w">
+ <div class="stats"><div class="stat" data-f="pending"><b>${pend}</b><span>بانتظار التأكيد</span></div><div class="stat" data-f="confirmed"><b>${conf}</b><span>مؤكدة قادمة</span></div><div class="stat" data-f="all"><b>${mon}</b><span>حجوزات هذا الشهر</span></div></div>
+ <div class="tabs"><button data-t="cal" class="${TAB==='cal'?'on':''}">التقويم</button><button data-t="list" class="${TAB==='list'?'on':''}">قائمة الحجوزات</button></div>
+ <div id="body"></div></div>`;
+ $('rf').onclick=refresh;$('lo').onclick=()=>{try{localStorage.removeItem('hcode')}catch(e){}CODE='';login()};
+ document.querySelectorAll('.stat').forEach(s=>s.onclick=()=>{TAB='list';FIL=s.dataset.f;render()});
+ document.querySelectorAll('.tabs button').forEach(s=>s.onclick=()=>{TAB=s.dataset.t;render()});
+ TAB==='cal'?cal():list()
+}
+function cal(){
+ const y=YM.y,m=YM.m,first=new Date(y,m,1),n=new Date(y,m+1,0).getDate(),off=(first.getDay()+1)%7,B=D.bookings,blk={};D.blocked.forEach(b=>blk[b.date]=b);
+ let h=`<div class="mh"><button id="pv">›</button><b>${fmtM.format(first)}</b><button id="nx">‹</button></div><div class="cal">`+DOWS.map(d=>`<div class="dh">${d}</div>`).join('');
+ for(let i=0;i<off;i++)h+='<div></div>';
+ for(let d=1;d<=n;d++){const s=dstr(y,m,d),bs=B.filter(b=>b.date===s&&act(b)),p=bs.filter(b=>b.status==='بانتظار التأكيد').length,c=bs.length-p,past=s<D.today;
+  h+=`<div class="d ${blk[s]?'blk':(!past&&!bs.length?'free':'')} ${past?'past':''} ${s===D.today?'today':''} ${SEL===s?'sel':''}" data-d="${s}">${d}<span class="dots">${p?'<i class="dp">'+p+'</i>':''}${c?'<i class="dc">'+c+'</i>':''}</span></div>`}
+ h+=`</div><div class="lg"><span>🟩 متاح</span><span><i style="background:#d89b00;color:#fff;border-radius:8px;padding:0 6px;font-style:normal">1</i> بانتظار التأكيد</span><span><i style="background:#2e9b4e;color:#fff;border-radius:8px;padding:0 6px;font-style:normal">1</i> مؤكد</span><span>⬜ مغلق</span></div>`;
+ if(SEL){const bs=B.filter(b=>b.date===SEL).sort((a,b)=>a.time.localeCompare(b.time));
+  h+=`<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><b>${dayN(SEL)} ${SEL}<br><span style="font-weight:400;color:var(--mut);font-size:13px">${hij(SEL)}${D.cap?' · الحد الأقصى '+D.cap+' حجوزات':''}</span></b><div class="acts" style="margin:0"><button class="ok" id="add">+ حجز يدوي</button><button id="bl">${blk[SEL]?'✅ فتح اليوم':'🚫 إغلاق اليوم'}</button></div></div>${blk[SEL]?'<div class="m" style="margin-top:6px">اليوم مغلق'+(blk[SEL].reason?': '+blk[SEL].reason:'')+'</div>':''}${bs.length?bs.map(card).join(''):'<div class="empty">لا توجد حجوزات في هذا اليوم'+(D.today<=SEL&&!blk[SEL]?' — اليوم متاح':'')+'</div>'}</div>`}
+ $('body').innerHTML=h;
+ $('pv').onclick=()=>{YM.m--;if(YM.m<0){YM.m=11;YM.y--}cal()};$('nx').onclick=()=>{YM.m++;if(YM.m>11){YM.m=0;YM.y++}cal()};
+ document.querySelectorAll('.d').forEach(x=>x.onclick=()=>{SEL=SEL===x.dataset.d?null:x.dataset.d;cal()});
+ if($('add'))$('add').onclick=()=>form(null,SEL);
+ if($('bl'))$('bl').onclick=()=>blockDay(SEL,!blk[SEL]);
+ wire()
+}
+function list(){
+ const t=D.today,F={pending:b=>b.status==='بانتظار التأكيد'&&b.date>=t,confirmed:b=>b.status==='مؤكد'&&b.date>=t,all:b=>act(b)&&b.date>=t,past:b=>b.date<t||b.status==='مكتمل'||b.status==='ملغي'};
+ const names={pending:'بانتظار التأكيد',confirmed:'مؤكدة',all:'كل القادمة',past:'السابقة والملغاة'};
+ let bs=D.bookings.filter(F[FIL]);bs.sort((a,b)=>(FIL==='past'?-1:1)*(a.date+a.time).localeCompare(b.date+b.time));
+ $('body').innerHTML=`<div class="chips">${Object.keys(names).map(k=>`<button class="${FIL===k?'on':''}" data-f="${k}">${names[k]}</button>`).join('')}</div><div style="margin-top:6px"><button class="btn" id="add2" style="margin-top:8px">+ إضافة حجز يدوي</button></div>${bs.length?bs.map(card).join(''):'<div class="empty">لا توجد حجوزات هنا</div>'}`;
+ document.querySelectorAll('.chips button').forEach(x=>x.onclick=()=>{FIL=x.dataset.f;list()});
+ $('add2').onclick=()=>form(null,'');wire()
+}
+function card(b){
+ const si=ST.indexOf(b.status),wa='https://wa.me/'+phoneIntl(b.phone)+'?text='+encodeURIComponent('أهلًا '+b.name+'، تم تأكيد حجزك مع المصوّرة حنان واصلي (ONTOP Studio) يوم '+dayN(b.date)+' '+b.date+' الساعة '+b.time+'. رقم الحجز: '+b.id);
+ return `<div class="card" data-id="${b.id}"><div class="t"><span>${dayN(b.date)} ${b.date}${b.time?' · '+b.time:''}</span><span class="badge s${si}">${b.status}</span></div>
+ <div style="font-weight:700;margin-top:2px">${b.name}</div>
+ <div class="m">${b.pkg}${b.extra?' + '+b.extra+' ساعة إضافية':''} · ${hij(b.date)}</div>
+ ${b.place?'<div class="m">📍 '+b.place+'</div>':''}${b.note?'<div class="m">📝 '+b.note+'</div>':''}
+ <div class="m">💰 ${b.pay}${b.paid!==''&&b.paid!=null?' — '+b.paid+' ريال':''}${b.snote?' · '+b.snote:''} · <span style="opacity:.7">${b.id}${b.src==='يدوي'?' · يدوي':''}</span></div>
+ <div class="acts">${b.status==='بانتظار التأكيد'?'<button class="ok" data-a="ok">✅ تأكيد</button>':''}${b.status==='مؤكد'&&b.date<=D.today?'<button class="ok" data-a="done">✔ تم التصوير</button>':''}${b.phone?'<a href="tel:'+b.phone+'">📞 اتصال</a><a target="_blank" href="'+wa+'">💬 واتساب</a>':''}<button data-a="edit">✏️ تعديل / الدفع</button>${b.status!=='ملغي'?'<button class="no" data-a="cancel">❌ إلغاء</button>':'<button data-a="reopen">↩ إعادة</button>'}<button class="no" data-a="del">🗑</button></div></div>`
+}
+function wire(){document.querySelectorAll('.card [data-a]').forEach(x=>x.onclick=()=>doAct(x.closest('.card').dataset.id,x.dataset.a))}
+async function patch(id,p){const r=await api('admin_update',{id:id,patch:JSON.stringify(p)});if(!r.ok){alert(r.error||'تعذّر الحفظ');return false}await refresh();return true}
+async function doAct(id,a){
+ const b=D.bookings.find(x=>x.id===id);if(!b)return;
+ if(a==='ok')return patch(id,{status:'مؤكد'});
+ if(a==='done')return patch(id,{status:'مكتمل'});
+ if(a==='cancel'){if(confirm('إلغاء حجز '+b.name+'؟'))patch(id,{status:'ملغي'});return}
+ if(a==='reopen')return patch(id,{status:'بانتظار التأكيد'});
+ if(a==='del'){if(confirm('حذف الحجز نهائيًا؟ يفضّل الإلغاء بدل الحذف.')){const r=await api('admin_delete',{id:id});if(r.ok)refresh();else alert(r.error)}return}
+ if(a==='edit')form(b)
+}
+async function blockDay(s,on){let reason='';if(on)reason=prompt('سبب الإغلاق (اختياري)')||'';const r=await api('admin_block',{date:s,on:on?'1':'0',reason:reason});if(r.ok)refresh();else alert(r.error||'تعذّر')}
+function form(b,date){
+ const e=!!b,v=b||{date:date||'',time:'',pkg:(D.packages[0]||{}).name||'',extra:0,name:'',phone:'',place:'',note:'',status:'مؤكد',pay:'غير مدفوع',paid:'',snote:''};
+ const opt=(arr,sel)=>arr.map(x=>`<option ${x===sel?'selected':''}>${x}</option>`).join('');
+ $('sh').innerHTML=`<h3 style="color:var(--ac2)">${e?'تعديل الحجز '+b.id:'إضافة حجز يدوي'}</h3>
+ <label>اسم العروس<input id="f-name" value="${v.name}"></label><label>الجوال<input id="f-phone" type="tel" value="${v.phone}"></label>
+ <label>التاريخ<input id="f-date" type="date" value="${v.date}"></label><label>وقت البدء<input id="f-time" type="time" value="${v.time}"></label>
+ <label>الباقة<select id="f-pkg">${opt(D.packages.map(p=>p.name),v.pkg)}</select></label><label>ساعات إضافية<input id="f-extra" type="number" min="0" max="10" value="${v.extra}"></label>
+ <label>موقع المناسبة<input id="f-place" value="${v.place}"></label><label>ملاحظات العروس<textarea id="f-note" rows="2">${v.note}</textarea></label>
+ <label>حالة الحجز<select id="f-status">${opt(ST,v.status)}</select></label><label>حالة الدفع<select id="f-pay">${opt(PAY,v.pay)}</select></label>
+ <label>المبلغ المدفوع (ريال)<input id="f-paid" type="number" min="0" value="${v.paid}"></label><label>ملاحظات الاستديو<textarea id="f-snote" rows="2">${v.snote}</textarea></label>
+ <div class="err" id="f-e"></div><div class="acts"><button class="ok" id="f-save">حفظ</button><button id="f-x">إلغاء</button></div>`;
+ $('ov').style.display='block';$('f-x').onclick=()=>$('ov').style.display='none';
+ $('f-save').onclick=async()=>{
+  const o={name:$('f-name').value,phone:$('f-phone').value,date:$('f-date').value,time:$('f-time').value,pkg:$('f-pkg').value,extra:$('f-extra').value||0,place:$('f-place').value,note:$('f-note').value,status:$('f-status').value,pay:$('f-pay').value,paid:$('f-paid').value,snote:$('f-snote').value};
+  if(!o.name.trim()||!o.date){$('f-e').textContent='اكتبي الاسم والتاريخ';return}
+  let r;if(e){const p={};Object.keys(o).forEach(k=>{if(String(o[k])!==String(v[k]==null?'':v[k]))p[k]=o[k]});if(!Object.keys(p).length){$('ov').style.display='none';return}r=await api('admin_update',{id:b.id,patch:JSON.stringify(p)})}
+  else r=await api('admin_add',{d:JSON.stringify(o)});
+  if(!r.ok){$('f-e').textContent=r.error||'تعذّر الحفظ';return}
+  $('ov').style.display='none';SEL=o.date||SEL;refresh()}
+}
+(async()=>{let c='';try{c=localStorage.getItem('hcode')||''}catch(e){}
+ if(c&&URL_){CODE=c;try{const r=await api('admin_list');if(r.ok){load(r);return}}catch(e){}}login()})();
+</script></body></html>
